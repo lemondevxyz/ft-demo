@@ -1,0 +1,24 @@
+#!/sbin/openrc-run
+
+name="ft-demo"
+description="a demo for the remote file browser"
+command="/usr/local/sbin/ft-demo"
+command_args="/tmp/ft-demo/container /tmp/ft-demo/fuse /etc/ft-demo/template/"
+command_user=caddy:caddy
+pidfile="/run/${RC_SVCNAME}.pid"
+command_background="yes"
+start_pre() {
+	if [ ! -S "/tmp/ft.sock" ]; then
+		echo "ft socket must exist"
+		exit 1
+	fi
+	doas rm -rf /tmp/ft-demo/server.sock
+	doas -u caddy fusermount -qu /tmp/ft-demo/fuse
+	export FT_ADDR=unix!/tmp/ft.sock
+	export FT_DEMO_ADDR=unix!/tmp/ft-demo/server.sock
+}
+
+depend() {
+	need net localmount
+	after firewall ft
+}
