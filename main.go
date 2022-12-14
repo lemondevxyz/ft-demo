@@ -143,6 +143,9 @@ func getFuse(credsMap *sync.Map) (afero.Fs, *fuse.Server) {
 		template: afero.NewBasePathFs(afero.NewOsFs(), template),
 	}
 
+	os.MkdirAll(container, 0755)
+	os.MkdirAll(fuse, 0755)
+
 	files, _ := afero.ReadDir(containerFs, ".")
 	for _, v := range files {
 		containerFs.RemoveAll(v.Name())
