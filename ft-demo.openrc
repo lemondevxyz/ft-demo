@@ -1,5 +1,4 @@
 #!/sbin/openrc-run
-
 name="ft-demo"
 description="a demo for the remote file browser"
 command="/usr/local/sbin/ft-demo"
@@ -12,6 +11,7 @@ start_pre() {
 		echo "ft socket must exist"
 		exit 1
 	fi
+	doas -u caddy mkdir -p /tmp/ft-demo /tmp/ft-demo/fuse /tmp/ft-demo/container
 	doas rm -rf /tmp/ft-demo/server.sock
 	doas -u caddy fusermount -qu /tmp/ft-demo/fuse
 	export FT_ADDR=unix!/tmp/ft.sock
