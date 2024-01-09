@@ -255,7 +255,7 @@ func getIp(r *http.Request) string {
 }
 
 func authMiddleware(m *sync.Map, w http.ResponseWriter, r *http.Request) *credentials {
-	ip, _, _ := net.SplitHostPort(getIp(r))
+	ip := getIp(r)
 
 	val, ok := m.Load(ip)
 	if !ok {
