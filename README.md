@@ -1,10 +1,17 @@
 # ft-demo
 ft-demo is a wrapper around [`ft`](https://github.com/lemondevxyz/ft) that enables random users to try ft. checkout the graph below to understand how `ft-demo` works.
 
-![How this demo works](procedure.png)
+## can I run it?
+Yeah, just clone the repository, cd into it and execute the following commands:
+```sh
+docker build -t ft-demo - < Dockerfile
+docker run --rm -d --device /dev/fuse --privileged -p 127.0.0.1:12345:12345 ft-demo
+```
+
+Then, go to [localhost:12345](http://localhost:12345) and voilà.
 
 ## sweet, can I try?
-yeah, just go to [ft.lemondev.xyz](https://ft.lemondev.xyz). 
+yeah, just go to [ft.lemondev.xyz](https://ft.lemondev.xyz).
 
 note: this instance will restart everyday at 00:00 MYT Time.
 
