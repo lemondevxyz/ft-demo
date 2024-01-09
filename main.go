@@ -245,8 +245,17 @@ type credentials struct {
 
 func generateId() string { return randstr.String(5) }
 
+func getIp(r *http.Request) string {
+	someIp := r.Header.Get("X-Forwarded-For")
+	if len(someIp) > 0 {
+		return someIp
+	}
+
+	return r.RemoteAddr
+}
+
 func authMiddleware(m *sync.Map, w http.ResponseWriter, r *http.Request) *credentials {
-	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
+	ip, _, _ := net.SplitHostPort(getIp(r))
 
 	val, ok := m.Load(ip)
 	if !ok {
@@ -605,7 +614,6 @@ func main() {
 				return strings.Join(splt, "/")
 			})
 			setIfExists(&input, "writer_id", getId())
-
 			if strings.HasPrefix(r.RequestURI, "/api/v0/op") &&
 				r.RequestURI != "/api/v0/op/new" {
 				_, ok := creds.ops.Load(getOrEmptyString(&input, "id"))
